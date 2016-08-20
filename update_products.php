@@ -11,10 +11,10 @@ $csv = file_get_contents($url);
 $header = array();
 $records = toRecords($csv, $header);
 $tags = array();
-$types = array();
-$products = toProducts($records, $header, $tags, $types);
+$categories = array();
+$products = toProducts($records, $header, $tags, $categories);
 $root = new stdClass();
-$root->types = $types;
+$root->categories = $categories;
 $root->tags = $tags;
 $root->products = $products;
 
@@ -36,7 +36,7 @@ function toRecords($csv, &$header) {
 
 
 // ----------- to object -----------
-function toProducts($records, $header, &$allTags, &$allTypes) {
+function toProducts($records, $header, &$allTags, &$allCategories) {
     $products = Array();
     foreach ($records as $record) {
         $product = new stdClass();
@@ -52,8 +52,8 @@ function toProducts($records, $header, &$allTags, &$allTypes) {
                 $allTags = array_merge($allTags, $tags);
                 continue;
             }
-            if ($key === "type") {
-                $allTypes[] = $val;
+            if ($key === "category") {
+                $allCategories[] = $val;
             }
 
             // そのまま値をセット
@@ -65,7 +65,7 @@ function toProducts($records, $header, &$allTags, &$allTypes) {
         $products[] = $product;
     }
     $allTags = array_values(array_unique($allTags));
-    $allTypes = array_values(array_unique($allTypes));
+    $allCategories = array_values(array_unique($allCategories));
     return $products;
 }
 

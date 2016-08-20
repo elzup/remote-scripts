@@ -10,12 +10,18 @@ $out_path = '/var/www/html/elzup.com/data/products.json';
 $csv = file_get_contents($url);
 $header = array();
 $records = toRecords($csv, $header);
-$products = toProducts($records, $header);
+$tags = array();
+$types = array();
+$products = toProducts($records, $header, $tags, $types);
+$root = new stdClass();
+$root->types = $types;
+$root->tags = $tags;
+$root->products = $products;
 
 // ----------- update data -----------
 // var_dump($products);
-echo json_encode($products);
-file_put_contents($out_path, json_encode($products));
+echo json_encode($root);
+file_put_contents($out_path, json_encode($root));
 
 
 function toRecords($csv, &$header) {
@@ -30,7 +36,7 @@ function toRecords($csv, &$header) {
 
 
 // ----------- to object -----------
-function toProducts($records, $header) {
+function toProducts($records, $header, &$allTags, &$allTypes) {
     $products = Array();
     foreach ($records as $record) {
         $product = new stdClass();
@@ -43,7 +49,11 @@ function toProducts($records, $header) {
             if ($key === "tags") {
                 $tags = explode('-', $val);
                 $product->tags = $tags;
+                $allTags = array_merge($allTags, $tags);
                 continue;
+            }
+            if ($key === "type") {
+                $allTypes[] = $val;
             }
 
             // そのまま値をセット
@@ -54,6 +64,8 @@ function toProducts($records, $header) {
         }
         $products[] = $product;
     }
+    $allTags = array_values(array_unique($allTags));
+    $allTypes = array_values(array_unique($allTypes));
     return $products;
 }
 

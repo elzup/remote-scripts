@@ -4,7 +4,7 @@ ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 $url = 'https://docs.google.com/spreadsheets/d/17GVpMPAreHUSEz47I2J_ttRjkbMUcj6lHfv_9f1e-7w/pub?gid=0&single=true&output=csv';
-$out_path = '/var/www/html/elzup.com/products.json';
+$out_path = '/var/www/html/elzup.com/data/products.json';
 
 // ----------- get data -----------
 $csv = file_get_contents($url);

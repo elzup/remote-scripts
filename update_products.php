@@ -79,7 +79,7 @@ function parse_members($line) {
         $infos = explode(':', $member_str);
         // var_dump($infos);
         $member->name = $infos[0];
-        $member->discription = $infos[1];
+        $member->description = $infos[1];
         $members[] = $member;
     }
     return $members;
